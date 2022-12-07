@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  patient-reservation:
+    container_name: patient-reservation-container
+    build:
+      context: ../target
+      dockerfile: ../docker/docker-files/patient-reservation/Dockerfile
+    image: patient-reservation
+    restart: unless-stopped
+    ports:
+      - 8081:8080
+    networks:
+      - patient-reservation-network
+  db:
+    container_name: patient-reservation-mysql-container
+    image: arm64v8/mysql:oracle
+    cap_add:
+      - SYS_NICE
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=patient_reservation
+      - MYSQL_ROOT_PASSWORD=rsvrootpwd
+      - MYSQL_USER=rsvuser
+      - MYSQL_PASSWORD=rsvpwd
+    ports:
+      - '3306:3306'
+    volumes:
+      - db-patient-reservation:/var/lib/mysql
+      - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - patient-reservation-network
+volumes:
+  db-patient-reservation:
+    name: db-patient-reservation
+    driver: local
+networks:
+  patient-reservation-network:
+    driver: bridge

@@ -1,0 +1,66 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: patient-reservation
+    version: "@project.version@"
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      org.hibernate.envers.do_not_audit_optimistic_locking_field: false
+      hibernate.integration.envers.enabled: true
+      hibernate.envers.autoRegisterListeners: false
+  datasource:
+    url: jdbc:mysql://kubernetes.docker.internal:3306/patient_reservation
+    username: rsvuser
+    password: rsvpwd
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      max-lifetime: 900000
+      connection-timeout: 10000
+      idle-timeout: 600000
+      minimum-idle: 5
+      maximum-pool-size: 10
+  liquibase:
+    change-log: classpath:liquibase/master.xml
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  info:
+    env:
+      enabled: true
+info:
+  tags:
+    environment: ${spring.config.activate.on-profile}
+
+springdoc:
+  api-docs:
+    enabled: true
+
+logging:
+  level:
+    com.patient.reservation: INFO
+
+---
+#==============================================#
+# LOCAL                                        #
+#==============================================#
+
+spring:
+  config:
+    activate:
+      on-profile: local
+
+logging:
+  level:
+    com.patient.reservation: DEBUG
