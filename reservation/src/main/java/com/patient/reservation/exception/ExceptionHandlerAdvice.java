@@ -11,6 +11,9 @@ import lombok.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AuthorizationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -45,7 +48,7 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
     }
 
     /**
-     * Entity not found file exception
+     * Entity not found exception
      */
     @ExceptionHandler({EntityNotFoundException.class})
     public ResponseEntity<?> entityNotFoundException(Throwable e, HttpServletRequest request, HttpServletResponse response) {
@@ -53,6 +56,32 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                 .code(ServiceError.E0001.getCode())
                 .message(e.getMessage() != null ? e.getMessage() : ServiceError.E0001.getMessage())
                 .status(HttpStatus.NOT_FOUND)
+                .build();
+        return responseEntity(error);
+    }
+
+    /**
+     * User not found  exception
+     */
+    @ExceptionHandler({UsernameNotFoundException.class})
+    public ResponseEntity<?> userNotFoundException(Throwable e, HttpServletRequest request, HttpServletResponse response) {
+        Error error = Error.builder()
+                .code(ServiceError.E0003.getCode())
+                .message(e.getMessage() != null ? e.getMessage() : ServiceError.E0003.getMessage())
+                .status(HttpStatus.NOT_FOUND)
+                .build();
+        return responseEntity(error);
+    }
+
+    /**
+     * FORBIDDEN
+     */
+    @ExceptionHandler({BadCredentialsException.class, AuthorizationServiceException.class})
+    public ResponseEntity<?> forbidden(Throwable e, HttpServletRequest request, HttpServletResponse response) {
+        Error error = Error.builder()
+                .code(ServiceError.E0004.getCode())
+                .message(e.getMessage() != null ? e.getMessage() : ServiceError.E0004.getMessage())
+                .status(HttpStatus.FORBIDDEN)
                 .build();
         return responseEntity(error);
     }

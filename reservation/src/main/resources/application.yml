@@ -55,6 +55,9 @@ application:
     basic:
       username: rsvuser
       password: rsvpwd
+    jwt:
+      jwtSecret: weakprivatesecret
+      jwtExpiration: 60
 
 ---
 #==============================================#
@@ -71,3 +74,4 @@ spring:
 logging:
   level:
     com.patient.reservation: DEBUG
+    org.springframework.security: DEBUG

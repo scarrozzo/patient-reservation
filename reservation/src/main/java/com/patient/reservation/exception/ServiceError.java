@@ -15,7 +15,9 @@ public enum ServiceError {
      */
     E0000(ErrorCode.E0000, "Generic error."),
     E0001(ErrorCode.E0001, "Entity not found"),
-    E0002(ErrorCode.E0002, "Entity already exists");
+    E0002(ErrorCode.E0002, "Entity already exists"),
+    E0003(ErrorCode.E0003, "User not Found"),
+    E0004(ErrorCode.E0004, "Forbidden");
 
     @Getter
     private String code;

@@ -9,15 +9,15 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Order(90)
-@Configuration
-@EnableWebSecurity
+//@Configuration
 public class ManagementSecurityConfig {
 
     private static final String MANAGEMENT_ROLE = "MANAGEMENT";
@@ -35,7 +35,9 @@ public class ManagementSecurityConfig {
     private Environment environment;
 
     @Bean
-    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    protected SecurityFilterChain filterChainBasicAuth(HttpSecurity http) throws Exception {
+        http.securityMatcher(DEFAULT_ACTUATOR_PATH + "/**", SWAGGER_UI_PATH + "/**", API_DOCS_PATH + "/**", SWAGGER_UI_PATH + ".html");
+
         /**
          * OpenAPI endpoints
          */
@@ -52,11 +54,12 @@ public class ManagementSecurityConfig {
 
         http.csrf().disable().sessionManagement().disable().httpBasic();
 
+        http.userDetailsService(inMemoryUserDetailService());
+
         return http.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
+    private UserDetailsService inMemoryUserDetailService() {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
         manager.createUser(User.withUsername(username)
                 .password("{noop}" + password)

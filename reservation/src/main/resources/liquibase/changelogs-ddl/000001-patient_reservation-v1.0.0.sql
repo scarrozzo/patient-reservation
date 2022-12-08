@@ -20,6 +20,7 @@ CREATE TABLE user
     login_enabled      BOOLEAN     NOT NULL DEFAULT FALSE,
     is_patient         BOOLEAN     NOT NULL,
     is_doctor          BOOLEAN     NOT NULL,
+    UNIQUE (username),
     PRIMARY KEY (id)
 );
 
@@ -44,4 +45,30 @@ CREATE TABLE visit
     CONSTRAINT visit_doctor_id FOREIGN KEY (doctor_id) REFERENCES user (id),
     CONSTRAINT visit_patient_id FOREIGN KEY (patient_id) REFERENCES user (id),
     PRIMARY KEY (id)
+);
+
+-- changeset 000001-patient-reservation:3
+CREATE TABLE role
+(
+    id                 BIGINT      NOT NULL AUTO_INCREMENT,
+    version_           BIGINT      NOT NULL DEFAULT 0,
+    uid                VARCHAR(36) NOT NULL,
+    creator            VARCHAR(96) NOT NULL,
+    modifier           VARCHAR(96) NOT NULL,
+    created_date       DATE        NOT NULL DEFAULT (CURRENT_DATE),
+    created_time       TIME        NOT NULL DEFAULT (CURRENT_TIME),
+    last_modified_date DATE        NOT NULL DEFAULT (CURRENT_DATE),
+    last_modified_time TIME        NOT NULL DEFAULT (CURRENT_TIME),
+    name               VARCHAR(50) NOT NULL,
+    UNIQUE (name),
+    PRIMARY KEY (id)
+);
+
+-- changeset 000001-patient-reservation:4
+CREATE TABLE user_role
+(
+    user_id BIGINT NOT NULL,
+    role_id BIGINT NOT NULL,
+    CONSTRAINT user_role_user FOREIGN KEY (user_id) REFERENCES user (id),
+    CONSTRAINT user_role_role FOREIGN KEY (role_id) REFERENCES role (id)
 );
