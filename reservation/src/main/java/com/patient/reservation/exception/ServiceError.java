@@ -14,8 +14,8 @@ public enum ServiceError {
      * Local error codes.
      */
     E0000(ErrorCode.E0000, "Generic error."),
-    E0003(ErrorCode.E0001, "Entity not found"),
-    E0004(ErrorCode.E0002, "Entity already exists");
+    E0001(ErrorCode.E0001, "Entity not found"),
+    E0002(ErrorCode.E0002, "Entity already exists");
 
     @Getter
     private String code;

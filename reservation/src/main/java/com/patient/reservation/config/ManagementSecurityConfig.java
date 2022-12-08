@@ -23,7 +23,7 @@ public class ManagementSecurityConfig {
     private static final String MANAGEMENT_ROLE = "MANAGEMENT";
     public static final String DEFAULT_ACTUATOR_PATH = "/actuator";
     private static final String SWAGGER_UI_PATH = "/swagger-ui";
-    private static final String V_3_API_DOCS_PATH = "/v3/api-docs";
+    private static final String API_DOCS_PATH = "/api-docs";
 
     @Value("${application.security.basic.username}")
     private String username;
@@ -40,9 +40,9 @@ public class ManagementSecurityConfig {
          * OpenAPI endpoints
          */
         if (environment.acceptsProfiles(Profiles.of(Profile.PROD, Profile.PRE_PROD))) {
-            http.authorizeHttpRequests().requestMatchers(DEFAULT_ACTUATOR_PATH + "/**", SWAGGER_UI_PATH + "/**", V_3_API_DOCS_PATH + "/**").denyAll();
+            http.authorizeHttpRequests().requestMatchers(DEFAULT_ACTUATOR_PATH + "/**", SWAGGER_UI_PATH + "/**", API_DOCS_PATH + "/**", SWAGGER_UI_PATH + ".html").denyAll();
         } else {
-            http.authorizeHttpRequests().requestMatchers(DEFAULT_ACTUATOR_PATH + "/**", SWAGGER_UI_PATH + "/**", V_3_API_DOCS_PATH + "/**").permitAll();
+            http.authorizeHttpRequests().requestMatchers(DEFAULT_ACTUATOR_PATH + "/**", SWAGGER_UI_PATH + "/**", API_DOCS_PATH + "/**", SWAGGER_UI_PATH + ".html").permitAll();
         }
 
         /**

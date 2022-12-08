@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.patient.core.util.JsonUtils;
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.*;
@@ -23,8 +24,8 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler({EntityExistsException.class, DataIntegrityViolationException.class, ConflictException.class})
     public ResponseEntity<?> conflict(Throwable e, HttpServletRequest request, HttpServletResponse response) {
         Error error = Error.builder()
-                .code(ServiceError.E0004.getCode())
-                .message(e.getMessage() != null ? e.getMessage() : ServiceError.E0004.getMessage())
+                .code(ServiceError.E0002.getCode())
+                .message(e.getMessage() != null ? e.getMessage() : ServiceError.E0002.getMessage())
                 .status(HttpStatus.CONFLICT)
                 .build();
         return responseEntity(error);
@@ -39,6 +40,19 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
                 .code(ServiceError.V0000.getCode())
                 .message(e.getMessage() != null ? e.getMessage() : ServiceError.V0000.getMessage())
                 .status(HttpStatus.BAD_REQUEST)
+                .build();
+        return responseEntity(error);
+    }
+
+    /**
+     * Entity not found file exception
+     */
+    @ExceptionHandler({EntityNotFoundException.class})
+    public ResponseEntity<?> entityNotFoundException(Throwable e, HttpServletRequest request, HttpServletResponse response) {
+        Error error = Error.builder()
+                .code(ServiceError.E0001.getCode())
+                .message(e.getMessage() != null ? e.getMessage() : ServiceError.E0001.getMessage())
+                .status(HttpStatus.NOT_FOUND)
                 .build();
         return responseEntity(error);
     }

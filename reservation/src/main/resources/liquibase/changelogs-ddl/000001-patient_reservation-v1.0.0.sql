@@ -1,6 +1,6 @@
 -- liquibase formatted sql
 
--- changeset patient-reservation:1
+-- changeset 000001-patient-reservation:1
 CREATE TABLE user
 (
     id                 BIGINT      NOT NULL AUTO_INCREMENT,
@@ -23,7 +23,7 @@ CREATE TABLE user
     PRIMARY KEY (id)
 );
 
--- changeset patient-reservation:2
+-- changeset 000001-patient-reservation:2
 CREATE TABLE visit
 (
     id                 BIGINT      NOT NULL AUTO_INCREMENT,

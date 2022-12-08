@@ -23,6 +23,7 @@ spring:
       maximum-pool-size: 10
   liquibase:
     change-log: classpath:liquibase/master.xml
+    contexts: ddl
 
 springdoc:
   api-docs:
@@ -64,6 +65,8 @@ spring:
   config:
     activate:
       on-profile: local
+  liquibase:
+    contexts: ddl, data
 
 logging:
   level:
