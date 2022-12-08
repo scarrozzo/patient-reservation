@@ -3,6 +3,7 @@ package com.patient.reservation.controller.user;
 import com.patient.reservation.controller.PathConfig;
 import com.patient.reservation.controller.user.assembler.UserRepresentationModelAssembler;
 import com.patient.reservation.controller.user.representation.UserRepresentationModel;
+import com.patient.reservation.domain.user.dto.PostUserDto;
 import com.patient.reservation.domain.user.model.User;
 import com.patient.reservation.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,10 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.patient.reservation.controller.PathConfig.UID_TEMPLATE;
 import static org.springframework.http.ResponseEntity.ok;
@@ -63,6 +62,16 @@ public class UserController {
                                                            @Parameter(description = "The identifier of the User.", example = "80b9ffcf-f374-47b4-8774-bfbaa2c64ebe")
                                                            @PathVariable String uid) {
         User user = userService.getUser(uid);
+        return ok().body(userRepresentationModelAssembler.toModel(user));
+    }
+
+    @Operation(summary = "Create a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "User created", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserRepresentationModel.class))})
+    })
+    @PostMapping
+    public ResponseEntity<UserRepresentationModel> createUser(HttpServletRequest request, HttpServletResponse response, @RequestBody @Valid PostUserDto postUserDto){
+        User user = userService.createUser(postUserDto);
         return ok().body(userRepresentationModelAssembler.toModel(user));
     }
 }

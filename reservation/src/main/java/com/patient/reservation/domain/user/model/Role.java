@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "role")
 @Getter
@@ -23,4 +25,8 @@ public class Role extends BaseEntity {
     @Column(length = 50)
     private RoleType name;
 
+    @PrePersist
+    private void initUid() {
+        this.uid = UUID.nameUUIDFromBytes((getClass().getSimpleName() + "_" + getId()).getBytes()).toString();
+    }
 }

@@ -21,8 +21,16 @@ public class UserDomainService {
         return userRepository.findAll(pageable);
     }
 
+    public boolean existsByUsername(String username){
+        return userRepository.existsByUsername(username);
+    }
+
     public User getUser(String uid){
         return userRepository.findByUid(uid).orElseThrow(EntityNotFoundException::new);
+    }
+
+    public User save(User user){
+        return userRepository.save(user);
     }
 
 }

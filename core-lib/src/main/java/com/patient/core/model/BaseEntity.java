@@ -1,9 +1,6 @@
 package com.patient.core.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +18,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
+import java.util.UUID;
 
 @MappedSuperclass
 @Getter
@@ -31,50 +29,50 @@ import java.util.Objects;
 @NaturalIdCache
 @ToString(onlyExplicitlyIncluded = true)
 @EntityListeners(AuditingEntityListener.class)
-public class BaseEntity {
+public abstract class BaseEntity {
     @Setter
     @Getter
     @Version
     @Column(name = "version_")
-    private Long version;
+    protected Long version;
 
     @ToString.Include
     @Setter
     @Getter
-    @NaturalId
+    @NaturalId(mutable = true)
     @NotNull
-    @Column(unique = true, updatable = false, length = 64, nullable = false)
-    private String uid;
+    @Column(unique = true, updatable = false, length = 36, nullable = false)
+    protected String uid;
 
     @NotNull
     @CreatedBy
     @Column(name = "creator", length = 96)
-    private String creator;
+    protected String creator;
 
     @NotNull
     @LastModifiedBy
     @Column(name = "modifier", length = 96)
-    private String modifier;
+    protected String modifier;
 
     @NotNull
     @CreatedDate
     @Column(name = "created_date")
-    private LocalDate createdDate;
+    protected LocalDate createdDate;
 
     @NotNull
     @CreatedDate
     @Column(name = "created_time")
-    private LocalTime createdTime;
+    protected LocalTime createdTime;
 
     @NotNull
     @LastModifiedDate
     @Column(name = "last_modified_date")
-    private LocalDate lastModifiedDate;
+    protected LocalDate lastModifiedDate;
 
     @NotNull
     @LastModifiedDate
     @Column(name = "last_modified_time")
-    private LocalTime lastModifiedTime;
+    protected LocalTime lastModifiedTime;
 
     @Override
     public boolean equals(Object o) {

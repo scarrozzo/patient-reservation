@@ -42,5 +42,6 @@ public enum ServiceError {
         public static final String E0002 = "E0002";
         public static final String E0003 = "E0003";
         public static final String E0004 = "E0004";
+        public static final String E0005 = "E0005";
     }
 }

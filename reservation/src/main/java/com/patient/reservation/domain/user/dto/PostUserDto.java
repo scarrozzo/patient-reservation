@@ -1,5 +1,6 @@
 package com.patient.reservation.domain.user.dto;
 
+import com.patient.reservation.domain.user.model.RoleType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +13,7 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Schema(name = "User")
 @Getter
@@ -35,7 +37,7 @@ public class PostUserDto {
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$")
     @NotBlank
     @Size(min = 8, max = 20)
-    private String passwordHash;
+    private String password;
 
     @NotBlank
     @Size(max = 50)
@@ -56,4 +58,6 @@ public class PostUserDto {
 
     @NotNull
     private Boolean isPatient;
+
+    Set<RoleType> roles;
 }

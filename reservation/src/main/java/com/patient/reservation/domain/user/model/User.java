@@ -9,6 +9,7 @@ import lombok.ToString;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "user")
@@ -55,4 +56,8 @@ public class User extends BaseEntity {
     )
     private Set<Role> roles = new HashSet<>();
 
+    @PrePersist
+    private void initUid() {
+        this.uid = UUID.nameUUIDFromBytes((getClass().getSimpleName() + "_" + getId()).getBytes()).toString();
+    }
 }

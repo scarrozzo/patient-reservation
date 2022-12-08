@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 import static jakarta.persistence.EnumType.STRING;
 
@@ -42,4 +43,9 @@ public class Visit extends BaseEntity {
 
     @Column
     private Long patientId;
+
+    @PrePersist
+    private void initUid() {
+        this.uid = UUID.nameUUIDFromBytes((getClass().getSimpleName() + "_" + getId()).getBytes()).toString();
+    }
 }

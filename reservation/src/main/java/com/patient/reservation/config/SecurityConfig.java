@@ -41,7 +41,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
+    public AuthenticationTokenFilter authenticationTokenFilterBean() {
         return new AuthenticationTokenFilter();
     }
 

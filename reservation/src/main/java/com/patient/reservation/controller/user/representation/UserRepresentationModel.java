@@ -1,12 +1,14 @@
 package com.patient.reservation.controller.user.representation;
 
 import com.patient.core.assembler.BaseRepresentationModel;
+import com.patient.reservation.domain.user.model.RoleType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.hateoas.server.core.Relation;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @Schema(name = "UserRepresentationModel")
@@ -34,4 +36,7 @@ public class UserRepresentationModel extends BaseRepresentationModel<UserReprese
 
     @Schema(description = "True if user is a patient", example = "true")
     private Boolean isPatient;
+
+    @Schema(description = "User roles", example = "[ADMIN]")
+    Set<RoleType> roles;
 }

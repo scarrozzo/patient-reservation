@@ -3,8 +3,13 @@ package com.patient.reservation.controller.user.assembler;
 import com.patient.core.assembler.BaseRepresentationModelAssemblerSupport;
 import com.patient.reservation.controller.user.UserController;
 import com.patient.reservation.controller.user.representation.UserRepresentationModel;
+import com.patient.reservation.domain.user.model.Role;
+import com.patient.reservation.domain.user.model.RoleType;
 import com.patient.reservation.domain.user.model.User;
 import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class UserRepresentationModelAssembler extends BaseRepresentationModelAssemblerSupport<User, UserRepresentationModel> {
@@ -23,6 +28,7 @@ public class UserRepresentationModelAssembler extends BaseRepresentationModelAss
         UserRepresentationModel userRepresentationModel = new UserRepresentationModel();
 
         userRepresentationModel.setUid(entity.getUid());
+        userRepresentationModel.setUsername(entity.getUsername());
         userRepresentationModel.setFirstName(entity.getFirstName());
         userRepresentationModel.setLastName(entity.getLastName());
         userRepresentationModel.setDateOfBirth(entity.getDateOfBirth());
@@ -35,6 +41,14 @@ public class UserRepresentationModelAssembler extends BaseRepresentationModelAss
         userRepresentationModel.setLastModifiedTime(entity.getLastModifiedTime());
         userRepresentationModel.setCreator(entity.getCreator());
         userRepresentationModel.setModifier(entity.getModifier());
+
+        if(entity.getRoles() != null && !entity.getRoles().isEmpty()) {
+            Set<RoleType> roles = new HashSet<>();
+            for(Role role : entity.getRoles()) {
+                roles.add(role.getName());
+            }
+            userRepresentationModel.setRoles(roles);
+        }
 
         return userRepresentationModel;
     }
