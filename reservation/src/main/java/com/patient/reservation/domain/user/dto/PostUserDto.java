@@ -1,5 +1,6 @@
 package com.patient.reservation.domain.user.dto;
 
+import com.patient.reservation.domain.user.model.PatientIdentifierType;
 import com.patient.reservation.domain.user.model.RoleType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -38,6 +39,13 @@ public class PostUserDto {
     @NotBlank
     @Size(min = 8, max = 20)
     private String password;
+
+    @NotBlank
+    @Size(max = 100)
+    private String patientIdentifier;
+
+    @NotNull
+    private PatientIdentifierType patientIdentifierType;
 
     @NotBlank
     @Size(max = 50)

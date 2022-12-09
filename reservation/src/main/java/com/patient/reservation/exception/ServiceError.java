@@ -17,7 +17,10 @@ public enum ServiceError {
     E0001(ErrorCode.E0001, "Entity not found"),
     E0002(ErrorCode.E0002, "Entity already exists"),
     E0003(ErrorCode.E0003, "User not Found"),
-    E0004(ErrorCode.E0004, "Forbidden");
+    E0004(ErrorCode.E0004, "Forbidden"),
+    E0005(ErrorCode.E0005, "Invalid role for patient"),
+    E0006(ErrorCode.E0006, "The patient flag must be true"),
+    E0007(ErrorCode.E0007, "The doctor flag must be false");
 
     @Getter
     private String code;
@@ -43,5 +46,9 @@ public enum ServiceError {
         public static final String E0003 = "E0003";
         public static final String E0004 = "E0004";
         public static final String E0005 = "E0005";
+        public static final String E0006 = "E0006";
+        public static final String E0007 = "E0007";
+        public static final String E0008 = "E0008";
+        public static final String E0009 = "E0009";
     }
 }

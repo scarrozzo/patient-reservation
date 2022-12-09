@@ -1,6 +1,7 @@
 package com.patient.reservation.controller.user.representation;
 
 import com.patient.core.assembler.BaseRepresentationModel;
+import com.patient.reservation.domain.user.model.PatientIdentifierType;
 import com.patient.reservation.domain.user.model.RoleType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -18,6 +19,12 @@ public class UserRepresentationModel extends BaseRepresentationModel<UserReprese
 
     @Schema(description = "Login username", example = "user1")
     private String username;
+
+    @Schema(description = "Patient identifier", example = "432-79-0825")
+    private String patientIdentifier;
+
+    @Schema(description = "Patient identifier type", example = "SOCIAL_SECURITY_NUMBER")
+    private PatientIdentifierType patientIdentifierType;
 
     @Schema(description = "User first name", example = "Sergio")
     private String firstName;

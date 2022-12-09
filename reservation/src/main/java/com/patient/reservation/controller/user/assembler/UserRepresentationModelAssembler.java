@@ -29,6 +29,8 @@ public class UserRepresentationModelAssembler extends BaseRepresentationModelAss
 
         userRepresentationModel.setUid(entity.getUid());
         userRepresentationModel.setUsername(entity.getUsername());
+        userRepresentationModel.setPatientIdentifier(entity.getPatientIdentifier());
+        userRepresentationModel.setPatientIdentifierType(entity.getPatientIdentifierType());
         userRepresentationModel.setFirstName(entity.getFirstName());
         userRepresentationModel.setLastName(entity.getLastName());
         userRepresentationModel.setDateOfBirth(entity.getDateOfBirth());

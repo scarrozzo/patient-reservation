@@ -25,11 +25,13 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 import static com.patient.reservation.controller.PathConfig.UID_TEMPLATE;
 import static com.patient.reservation.security.Authorities.ROLE_ADMIN;
-import static org.springframework.http.ResponseEntity.noContent;
-import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.*;
 
 @Slf4j
 @RestController
@@ -76,7 +78,12 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserRepresentationModel> createUser(HttpServletRequest request, HttpServletResponse response, @RequestBody @Valid PostUserDto postUserDto){
         User user = userService.createUser(postUserDto);
-        return ok().body(userRepresentationModelAssembler.toModel(user));
+
+        final URI location = ServletUriComponentsBuilder
+                .fromCurrentServletMapping().path(PathConfig.USERS + "/{uid}").build()
+                .expand(user.getUid()).toUri();
+
+        return created(location).body(userRepresentationModelAssembler.toModel(user));
     }
 
     @Operation(summary = "Delete a user")

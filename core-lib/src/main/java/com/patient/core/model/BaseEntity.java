@@ -46,12 +46,12 @@ public abstract class BaseEntity {
 
     @NotNull
     @CreatedBy
-    @Column(name = "creator", length = 96)
+    @Column(name = "creator", length = 100)
     protected String creator;
 
     @NotNull
     @LastModifiedBy
-    @Column(name = "modifier", length = 96)
+    @Column(name = "modifier", length = 100)
     protected String modifier;
 
     @NotNull

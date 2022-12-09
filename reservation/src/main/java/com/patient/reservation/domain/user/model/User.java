@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import static jakarta.persistence.EnumType.STRING;
+
 @Entity
 @Table(name = "user")
 @Getter
@@ -29,6 +31,13 @@ public class User extends BaseEntity {
 
     @Column(length = 60)
     private String passwordHash;
+
+    @Column(length = 100)
+    private String patientIdentifier;
+
+    @Column(length = 100)
+    @Enumerated(STRING)
+    private PatientIdentifierType patientIdentifierType;
 
     @Column(length = 50)
     private String firstName;

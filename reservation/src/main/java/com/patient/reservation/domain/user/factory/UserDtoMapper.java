@@ -21,6 +21,8 @@ public class UserDtoMapper {
         entity.setIsDoctor(dto.getIsDoctor());
         entity.setIsPatient(dto.getIsPatient());
         entity.setLoginEnabled(dto.getLoginEnabled());
+        entity.setPatientIdentifier(dto.getPatientIdentifier());
+        entity.setPatientIdentifierType(dto.getPatientIdentifierType());
         // persist encoded password
         entity.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
 

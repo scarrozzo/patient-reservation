@@ -1,6 +1,7 @@
 package com.patient.reservation.domain.user.service;
 
 
+import com.patient.reservation.controller.user.PatientSearchParameters;
 import com.patient.reservation.domain.user.model.User;
 import com.patient.reservation.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -8,11 +9,25 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Slf4j
 @Service
 public class UserDomainService {
+
+    public static final String PATIENT_IDENTIFIER = "patientIdentifier";
+    public static final String PATIENT_IDENTIFIER_TYPE = "patientIdentifierType";
+    public static final String FIRST_NAME = "firstName";
+    public static final String LAST_NAME = "lastName";
+    public static final String DATE_OF_BIRTH = "dateOfBirth";
+    public static final String IS_PATIENT = "isPatient";
+    public static final String LIKE_OPERATOR = "%";
 
     @Autowired
     private UserRepository userRepository;
@@ -21,8 +36,44 @@ public class UserDomainService {
         return userRepository.findAll(pageable);
     }
 
-    public Page<User> getPatients(Pageable pageable){
-        return userRepository.findPatients(pageable);
+    public Page<User> getPatients(PatientSearchParameters searchParameters, Pageable pageable){
+        List<Specification<User>> userSpecifications = buildUserSpecification(searchParameters);
+
+        Iterator<Specification<User>> it = userSpecifications.iterator();
+        Specification<User> combinedSpecifications = Specification.where(it.next());
+        while (it.hasNext()) {
+            combinedSpecifications =  combinedSpecifications.and(it.next());
+        }
+
+        return userRepository.findAll(combinedSpecifications, pageable);
+    }
+
+    private List<Specification<User>> buildUserSpecification(PatientSearchParameters searchParameters){
+        List<Specification<User>> specifications = new ArrayList<>();
+
+        if(StringUtils.hasText(searchParameters.getPatientIdentifier())){
+            specifications.add((user, q, cb) -> cb.like(user.get(PATIENT_IDENTIFIER), searchParameters.getPatientIdentifier() + LIKE_OPERATOR));
+        }
+
+        if(searchParameters.getPatientIdentifierType() != null){
+            specifications.add((user, q, cb) -> cb.equal(user.get(PATIENT_IDENTIFIER_TYPE), searchParameters.getPatientIdentifier()));
+        }
+
+        if(StringUtils.hasText(searchParameters.getFirstName())){
+            specifications.add((user, q, cb) -> cb.like(user.get(FIRST_NAME), searchParameters.getFirstName()+ LIKE_OPERATOR));
+        }
+
+        if(StringUtils.hasText(searchParameters.getLastName())){
+            specifications.add((user, q, cb) -> cb.like(user.get(LAST_NAME), searchParameters.getLastName() + LIKE_OPERATOR));
+        }
+
+        if(searchParameters.getDateOfBirth() != null){
+            specifications.add((user, q, cb) -> cb.equal(user.get(DATE_OF_BIRTH), searchParameters.getDateOfBirth()));
+        }
+
+        specifications.add((user, q, cb) -> cb.equal(user.get(IS_PATIENT), Boolean.TRUE));
+
+        return specifications;
     }
 
     public boolean existsByUsername(String username){
