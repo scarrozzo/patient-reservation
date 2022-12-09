@@ -62,7 +62,7 @@ public class PatientController {
         return ok().body(userPagedResourcesAssembler.toModel(users, userRepresentationModelAssembler));
     }
 
-    @Operation(summary = "Get a user by uid")
+    @Operation(summary = "Get a patient by uid")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the user", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserRepresentationModel.class))}),
             @ApiResponse(responseCode = "404", description = "Patient not found", content = @Content)})

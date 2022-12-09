@@ -1,7 +1,9 @@
 package com.patient.reservation.domain.visit.model;
 
 import com.patient.core.model.BaseEntity;
+import com.patient.reservation.domain.user.model.User;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -44,8 +46,19 @@ public class Visit extends BaseEntity {
     @Column
     private Long patientId;
 
+    @Setter(AccessLevel.NONE)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patientId", referencedColumnName = "id", insertable = false, updatable = false)
+    private User patient;
+
+    @Setter(AccessLevel.NONE)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctorId", referencedColumnName = "id", insertable = false, updatable = false)
+    private User doctor;
+
     @PrePersist
     private void initUid() {
         this.uid = UUID.randomUUID().toString();
     }
+
 }
