@@ -33,6 +33,10 @@ public class UserService {
         return userDomainService.getUser(uid);
     }
 
+    public Page<User> getPatients(Pageable pageable){
+        return userDomainService.getPatients(pageable);
+    }
+
     public User createUser(PostUserDto postUserDto){
         CreateUserCommand command = beanFactory.getBean(CreateUserCommand.class, postUserDto);
         return command.execute();

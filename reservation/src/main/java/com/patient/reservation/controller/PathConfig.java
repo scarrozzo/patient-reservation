@@ -8,5 +8,6 @@ public interface PathConfig {
     String USERS = BASE_PATH_API + "/users";
     String VISITS = BASE_PATH_API + "/vists";
     String AUTH = BASE_PATH_API + "/auth";
+    String PATIENTS = BASE_PATH_API + "/patients";
 
 }

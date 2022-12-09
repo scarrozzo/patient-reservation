@@ -21,6 +21,10 @@ public class UserDomainService {
         return userRepository.findAll(pageable);
     }
 
+    public Page<User> getPatients(Pageable pageable){
+        return userRepository.findPatients(pageable);
+    }
+
     public boolean existsByUsername(String username){
         return userRepository.existsByUsername(username);
     }
