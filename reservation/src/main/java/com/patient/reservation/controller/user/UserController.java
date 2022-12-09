@@ -23,15 +23,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static com.patient.reservation.controller.PathConfig.UID_TEMPLATE;
+import static com.patient.reservation.security.Authorities.ROLE_ADMIN;
+import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.ok;
 
 @Slf4j
 @RestController
 @Tag(name = "Users API")
 @RequestMapping(path = PathConfig.USERS)
+@PreAuthorize(ROLE_ADMIN)
 public class UserController {
 
     @Autowired
@@ -73,5 +77,16 @@ public class UserController {
     public ResponseEntity<UserRepresentationModel> createUser(HttpServletRequest request, HttpServletResponse response, @RequestBody @Valid PostUserDto postUserDto){
         User user = userService.createUser(postUserDto);
         return ok().body(userRepresentationModelAssembler.toModel(user));
+    }
+
+    @Operation(summary = "Delete a user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User deleted", content = @Content)
+    })
+    @DeleteMapping(UID_TEMPLATE)
+    public ResponseEntity<Void> deleteUser(@Parameter(description = "The identifier of the User.", example = "80b9ffcf-f374-47b4-8774-bfbaa2c64ebe")
+                                           @PathVariable String uid){
+        userService.deleteUser(uid);
+        return noContent().build();
     }
 }

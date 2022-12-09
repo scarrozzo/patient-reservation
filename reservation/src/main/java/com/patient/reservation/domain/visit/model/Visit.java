@@ -46,6 +46,6 @@ public class Visit extends BaseEntity {
 
     @PrePersist
     private void initUid() {
-        this.uid = UUID.nameUUIDFromBytes((getClass().getSimpleName() + "_" + getId()).getBytes()).toString();
+        this.uid = UUID.randomUUID().toString();
     }
 }

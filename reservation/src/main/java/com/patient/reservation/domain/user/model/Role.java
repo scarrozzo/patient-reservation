@@ -27,6 +27,6 @@ public class Role extends BaseEntity {
 
     @PrePersist
     private void initUid() {
-        this.uid = UUID.nameUUIDFromBytes((getClass().getSimpleName() + "_" + getId()).getBytes()).toString();
+        this.uid = UUID.nameUUIDFromBytes((getClass().getSimpleName() + "_" + getName()).getBytes()).toString();
     }
 }

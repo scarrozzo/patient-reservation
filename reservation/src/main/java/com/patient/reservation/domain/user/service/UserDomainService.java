@@ -33,4 +33,8 @@ public class UserDomainService {
         return userRepository.save(user);
     }
 
+    public void delete(User user){
+        userRepository.delete(user);
+    }
+
 }

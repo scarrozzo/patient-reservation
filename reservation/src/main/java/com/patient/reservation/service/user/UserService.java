@@ -1,6 +1,7 @@
 package com.patient.reservation.service.user;
 
 import com.patient.reservation.command.user.CreateUserCommand;
+import com.patient.reservation.command.user.DeleteUserCommand;
 import com.patient.reservation.domain.user.dto.PostUserDto;
 import com.patient.reservation.domain.user.model.User;
 import com.patient.reservation.domain.user.service.UserDomainService;
@@ -35,6 +36,12 @@ public class UserService {
     public User createUser(PostUserDto postUserDto){
         CreateUserCommand command = beanFactory.getBean(CreateUserCommand.class, postUserDto);
         return command.execute();
+    }
+
+    public void deleteUser(String uid){
+        User user = userDomainService.getUser(uid);
+        DeleteUserCommand command = beanFactory.getBean(DeleteUserCommand.class, user);
+        command.execute();
     }
 
 }
