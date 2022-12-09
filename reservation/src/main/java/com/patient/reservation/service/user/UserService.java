@@ -2,14 +2,15 @@ package com.patient.reservation.service.user;
 
 import com.patient.reservation.command.user.CreateUserCommand;
 import com.patient.reservation.command.user.DeleteUserCommand;
+import com.patient.reservation.command.user.UpdateUserCommand;
 import com.patient.reservation.controller.user.PatientSearchParameters;
+import com.patient.reservation.domain.user.dto.PatchUserDto;
 import com.patient.reservation.domain.user.dto.PostUserDto;
 import com.patient.reservation.domain.user.model.RoleType;
 import com.patient.reservation.domain.user.model.User;
 import com.patient.reservation.domain.user.service.UserDomainService;
 import com.patient.reservation.exception.PermissionDeniedException;
 import com.patient.reservation.exception.ServiceError;
-import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +39,27 @@ public class UserService {
         return userDomainService.getUser(uid);
     }
 
+    public User createUser(PostUserDto postUserDto){
+        CreateUserCommand command = beanFactory.getBean(CreateUserCommand.class, postUserDto);
+        return command.execute();
+    }
+
+    public void deleteUser(String uid){
+        User user = userDomainService.getUser(uid);
+        DeleteUserCommand command = beanFactory.getBean(DeleteUserCommand.class, user);
+        command.execute();
+    }
+
+
+    /**
+    * Patients
+    * */
     public Page<User> getPatients(PatientSearchParameters searchParameters, Pageable pageable){
         return userDomainService.getPatients(searchParameters, pageable);
     }
 
-    public User createUser(PostUserDto postUserDto){
-        CreateUserCommand command = beanFactory.getBean(CreateUserCommand.class, postUserDto);
-        return command.execute();
+    public User getPatient(String uid){
+        return userDomainService.getPatient(uid);
     }
 
     public User createPatient(PostUserDto postUserDto){
@@ -63,10 +78,14 @@ public class UserService {
         return createUser(postUserDto);
     }
 
-    public void deleteUser(String uid){
+    public User updatePatient(String uid, PatchUserDto patchUserDto){
         User user = userDomainService.getUser(uid);
-        DeleteUserCommand command = beanFactory.getBean(DeleteUserCommand.class, user);
-        command.execute();
-    }
 
+        if(!Boolean.TRUE.equals(user.getIsPatient())){
+            throw new PermissionDeniedException(ServiceError.E0008.getMessage());
+        }
+
+        UpdateUserCommand command = beanFactory.getBean(UpdateUserCommand.class, user, patchUserDto);
+        return command.execute();
+    }
 }

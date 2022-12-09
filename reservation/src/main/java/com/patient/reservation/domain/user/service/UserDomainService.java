@@ -36,6 +36,22 @@ public class UserDomainService {
         return userRepository.findAll(pageable);
     }
 
+    public boolean existsByUsername(String username){
+        return userRepository.existsByUsername(username);
+    }
+
+    public User getUser(String uid){
+        return userRepository.findByUid(uid).orElseThrow(EntityNotFoundException::new);
+    }
+
+    public User save(User user){
+        return userRepository.save(user);
+    }
+
+    public void delete(User user){
+        userRepository.delete(user);
+    }
+
     public Page<User> getPatients(PatientSearchParameters searchParameters, Pageable pageable){
         List<Specification<User>> userSpecifications = buildUserSpecification(searchParameters);
 
@@ -46,6 +62,10 @@ public class UserDomainService {
         }
 
         return userRepository.findAll(combinedSpecifications, pageable);
+    }
+
+    public User getPatient(String uid){
+        return userRepository.findByUidAndIsPatient(uid, Boolean.TRUE).orElseThrow(EntityNotFoundException::new);
     }
 
     private List<Specification<User>> buildUserSpecification(PatientSearchParameters searchParameters){
@@ -74,22 +94,6 @@ public class UserDomainService {
         specifications.add((user, q, cb) -> cb.equal(user.get(IS_PATIENT), Boolean.TRUE));
 
         return specifications;
-    }
-
-    public boolean existsByUsername(String username){
-        return userRepository.existsByUsername(username);
-    }
-
-    public User getUser(String uid){
-        return userRepository.findByUid(uid).orElseThrow(EntityNotFoundException::new);
-    }
-
-    public User save(User user){
-        return userRepository.save(user);
-    }
-
-    public void delete(User user){
-        userRepository.delete(user);
     }
 
 }

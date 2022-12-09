@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 import java.time.LocalDate;
 import java.util.Set;
 
-@Schema(name = "User")
+@Schema(name = "PostUser")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,6 +24,7 @@ import java.util.Set;
 @ToString
 public class PostUserDto {
 
+    @Schema(description = "Login username", example = "user1")
     @NotBlank
     @Size(min = 3, max = 50)
     private String username;
@@ -35,37 +36,47 @@ public class PostUserDto {
      * Password must contain at least one special character like ! @ # & ( ).
      * Password must contain a length of at least 8 characters and a maximum of 20 characters.
      */
+    @Schema(description = "User password", example = "Password123?")
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$")
     @NotBlank
     @Size(min = 8, max = 20)
     private String password;
 
+    @Schema(description = "Patient identifier", example = "432-79-0825")
     @NotBlank
     @Size(max = 100)
     private String patientIdentifier;
 
+    @Schema(description = "Patient identifier type", example = "SOCIAL_SECURITY_NUMBER")
     @NotNull
     private PatientIdentifierType patientIdentifierType;
 
+    @Schema(description = "User first name", example = "Sergio")
     @NotBlank
     @Size(max = 50)
     private String firstName;
 
+    @Schema(description = "User last name", example = "Carrozzo")
     @NotBlank
     @Size(max = 50)
     private String lastName;
 
+    @Schema(description = "Date of birth", example = "24/10/1990")
     @NotNull
     private LocalDate dateOfBirth;
 
+    @Schema(description = "Can login", example = "true")
     @NotNull
     private Boolean loginEnabled;
 
+    @Schema(description = "True if user is a doctor", example = "true")
     @NotNull
     private Boolean isDoctor;
 
+    @Schema(description = "True if user is a patient", example = "true")
     @NotNull
     private Boolean isPatient;
 
+    @Schema(description = "User roles", example = "[ADMIN]")
     Set<RoleType> roles;
 }

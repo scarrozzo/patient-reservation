@@ -20,7 +20,8 @@ public enum ServiceError {
     E0004(ErrorCode.E0004, "Forbidden"),
     E0005(ErrorCode.E0005, "Invalid role for patient"),
     E0006(ErrorCode.E0006, "The patient flag must be true"),
-    E0007(ErrorCode.E0007, "The doctor flag must be false");
+    E0007(ErrorCode.E0007, "The doctor flag must be false"),
+    E0008(ErrorCode.E0008, "The user is not a patient");
 
     @Getter
     private String code;
