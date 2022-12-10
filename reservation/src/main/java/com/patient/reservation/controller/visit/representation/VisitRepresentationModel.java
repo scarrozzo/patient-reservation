@@ -1,7 +1,6 @@
 package com.patient.reservation.controller.visit.representation;
 
 import com.patient.core.assembler.BaseRepresentationModel;
-import com.patient.reservation.controller.user.representation.UserRepresentationModel;
 import com.patient.reservation.domain.visit.model.VisitReason;
 import com.patient.reservation.domain.visit.model.VisitType;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -4,6 +4,7 @@ import com.patient.reservation.controller.visit.VisitSearchParameters;
 import com.patient.reservation.domain.visit.model.Visit;
 import com.patient.reservation.domain.visit.repository.VisitRepository;
 import com.patient.reservation.security.UserDetailsImpl;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -64,7 +65,19 @@ public class VisitDomainService {
         return specifications;
     }
 
+    public Visit getVisit(String uid){
+        UserDetailsImpl userDetails = ((UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        if(Boolean.TRUE.equals(userDetails.isDoctor())) {
+            return visitRepository.findByUidAndDoctorId(uid, userDetails.getId()).orElseThrow(EntityNotFoundException::new);
+        }
+        return visitRepository.findByUid(uid).orElseThrow(EntityNotFoundException::new);
+    }
+
     public Visit save(Visit visit){
         return visitRepository.save(visit);
+    }
+
+    public void delete(Visit visit){
+        visitRepository.delete(visit);
     }
 }

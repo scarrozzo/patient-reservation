@@ -68,7 +68,11 @@ public class UserDomainService {
     }
 
     public User getPatient(String uid){
-        return userRepository.findByUidAndIsPatientAndDoctorId(uid, Boolean.TRUE, ((UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()).orElseThrow(EntityNotFoundException::new);
+        UserDetailsImpl userDetails = ((UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        if(Boolean.TRUE.equals(userDetails.isDoctor())){
+            return userRepository.findByUidAndIsPatientAndDoctorId(uid, Boolean.TRUE, userDetails.getId()).orElseThrow(EntityNotFoundException::new);
+        }
+        return userRepository.findByUid(uid).orElseThrow(EntityNotFoundException::new);
     }
 
     private List<Specification<User>> buildUserSpecifications(PatientSearchParameters searchParameters){
