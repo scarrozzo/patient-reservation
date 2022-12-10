@@ -2,6 +2,7 @@ package com.patient.reservation.controller.auth;
 
 import com.patient.reservation.security.JwtUtils;
 import com.patient.reservation.security.UserDetailsImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,7 +31,7 @@ public class AuthenticationController {
     private JwtUtils jwtUtils;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> authenticateUser(@RequestBody LoginRequestDto loginRequest) {
+    public ResponseEntity<JwtResponse> authenticateUser(@RequestBody @Valid LoginRequestDto loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));

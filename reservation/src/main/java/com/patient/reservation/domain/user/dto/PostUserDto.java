@@ -78,7 +78,6 @@ public class PostUserDto {
     private Boolean isPatient;
 
     @Schema(description = "The associated doctor", example = "80b9ffcf-f374-47b4-8774-bfbaa2c64ebe")
-    @NotNull
     private String doctorUid;
 
     @Schema(description = "User roles", example = "[ADMIN]")

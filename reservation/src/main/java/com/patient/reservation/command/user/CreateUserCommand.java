@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Set;
 
@@ -55,7 +56,10 @@ public class CreateUserCommand extends BaseTransactionalCommand<User> {
             throw new EntityExistsException(ServiceError.E0002.getMessage());
         }
 
-        User doctor = userDomainService.getUser(dto.getDoctorUid());
+        User doctor = null;
+        if(StringUtils.hasText(dto.getDoctorUid())) {
+            doctor = userDomainService.getUser(dto.getDoctorUid());
+        }
 
         // create user
         log.info("Creating new user...");
