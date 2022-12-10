@@ -3,11 +3,13 @@ package com.patient.reservation.domain.visit.service;
 import com.patient.reservation.controller.visit.VisitSearchParameters;
 import com.patient.reservation.domain.visit.model.Visit;
 import com.patient.reservation.domain.visit.repository.VisitRepository;
+import com.patient.reservation.security.UserDetailsImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -19,10 +21,10 @@ import java.util.List;
 @Service
 public class VisitDomainService {
 
+    public static final String DOCTOR_ID = "doctorId";
     public static final String VISIT_DATE = "date";
-    public static final String PATIENT_ID = "patientId";
     public static final String PATIENT = "patient";
-    public static final String ID = "id";
+    public static final String UID = "uid";
 
     @Autowired
     private VisitRepository visitRepository;
@@ -51,9 +53,18 @@ public class VisitDomainService {
         }
 
         if(StringUtils.hasText(searchParameters.getPatientUid())){
-            specifications.add((visit, q, cb) -> cb.equal(visit.join(PATIENT).get("uid"),searchParameters.getPatientUid()));
+            specifications.add((visit, q, cb) -> cb.equal(visit.join(PATIENT).get(UID),searchParameters.getPatientUid()));
+        }
+
+        UserDetailsImpl userDetails = ((UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        if(Boolean.TRUE.equals(userDetails.isDoctor())) {
+            specifications.add((user, q, cb) -> cb.equal(user.get(DOCTOR_ID), userDetails.getId()));
         }
 
         return specifications;
+    }
+
+    public Visit save(Visit visit){
+        return visitRepository.save(visit);
     }
 }

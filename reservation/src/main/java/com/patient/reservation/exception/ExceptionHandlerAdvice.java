@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -77,6 +78,20 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler {
         enrichValidationError(error, ex);
         return new ResponseEntity<>(error, error.getStatus());
     }
+
+    /**
+     * HttpMessageNotReadableException
+     */
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        Error error = Error.builder()
+                .code(ServiceError.V0000.getCode())
+                .message(ex.getMessage() != null ? ex.getMessage() : ServiceError.V0000.getMessage())
+                .status(HttpStatus.BAD_REQUEST)
+                .build();
+        return new ResponseEntity<>(error, error.getStatus());
+    }
+
 
     /**
      * Entity not found exception

@@ -41,6 +41,15 @@ public class UserRepresentationModel extends BaseRepresentationModel<UserReprese
     @Schema(description = "True if user is a doctor", example = "true")
     private Boolean isDoctor;
 
+    @Schema(description = "Doctor uid", example = "80b9ffcf-f374-47b4-8774-bfbaa2c64ebe")
+    private String doctorUid;
+
+    @Schema(description = "Doctor first name", example = "Sergio")
+    private String doctorFirstName;
+
+    @Schema(description = "Doctor last name", example = "Sergio")
+    private String doctorLastName;
+
     @Schema(description = "True if user is a patient", example = "true")
     private Boolean isPatient;
 

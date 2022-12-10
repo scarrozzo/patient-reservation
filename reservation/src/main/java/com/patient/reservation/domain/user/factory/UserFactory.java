@@ -14,9 +14,10 @@ public class UserFactory {
     @Autowired
     private UserDtoMapper userDtoMapper;
 
-    public User createUser(PostUserDto dto, Set<Role> roles){
+    public User createUser(PostUserDto dto, User doctor, Set<Role> roles){
         User user = new User();
         user = userDtoMapper.map(user, dto);
+        user.setDoctorId(doctor.getId());
         user.setRoles(roles);
         return user;
     }

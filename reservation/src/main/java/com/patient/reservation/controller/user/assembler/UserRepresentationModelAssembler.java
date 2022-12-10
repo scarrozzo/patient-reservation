@@ -44,6 +44,12 @@ public class UserRepresentationModelAssembler extends BaseRepresentationModelAss
         userRepresentationModel.setCreator(entity.getCreator());
         userRepresentationModel.setModifier(entity.getModifier());
 
+        if(entity.getDoctor() != null){
+            userRepresentationModel.setDoctorUid(entity.getDoctor().getUid());
+            userRepresentationModel.setDoctorFirstName(entity.getDoctor().getFirstName());
+            userRepresentationModel.setDoctorLastName(entity.getDoctor().getLastName());
+        }
+
         if(entity.getRoles() != null && !entity.getRoles().isEmpty()) {
             Set<RoleType> roles = new HashSet<>();
             for(Role role : entity.getRoles()) {

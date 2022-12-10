@@ -23,7 +23,9 @@ public enum ServiceError {
     E0007(ErrorCode.E0007, "The doctor flag must be false"),
     E0008(ErrorCode.E0008, "The user is not a patient"),
     E0009(ErrorCode.E0009, "You are trying to associate the patient with another doctor."),
-    E0010(ErrorCode.E0010, "You are trying to modify a patient not associated with you");
+    E0010(ErrorCode.E0010, "You are trying to modify a patient not associated with you"),
+    E0011(ErrorCode.E0011, "Visit date must be greater than or equal to today"),
+    E0012(ErrorCode.E0012, "You already have visits in the hour indicated");
 
     @Getter
     private String code;

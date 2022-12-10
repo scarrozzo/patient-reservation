@@ -1,6 +1,7 @@
 package com.patient.reservation.controller.visit.representation;
 
 import com.patient.core.assembler.BaseRepresentationModel;
+import com.patient.reservation.controller.user.representation.UserRepresentationModel;
 import com.patient.reservation.domain.visit.model.VisitReason;
 import com.patient.reservation.domain.visit.model.VisitType;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,7 +32,19 @@ public class VisitRepresentationModel extends BaseRepresentationModel<VisitRepre
     @Schema(description = "Patient uid", example = "80b9ffcf-f374-47b4-8774-bfbaa2c64ebe")
     private String patientUid;
 
+    @Schema(description = "Patient first name", example = "Sergio")
+    private String patientFirstName;
+
+    @Schema(description = "Patient last name", example = "Carrozzo")
+    private String patientLastName;
+
     @Schema(description = "Doctor uid", example = "80b9ffcf-f374-47b4-8774-bfbaa2c64ebe")
     private String doctorUid;
+
+    @Schema(description = "Doctor first name", example = "Gregory")
+    private String doctorFirstName;
+
+    @Schema(description = "Doctor last name", example = "House")
+    private String doctorLastName;
 
 }

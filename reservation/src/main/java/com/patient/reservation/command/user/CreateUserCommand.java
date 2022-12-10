@@ -55,9 +55,11 @@ public class CreateUserCommand extends BaseTransactionalCommand<User> {
             throw new EntityExistsException(ServiceError.E0002.getMessage());
         }
 
+        User doctor = userDomainService.getUser(dto.getDoctorUid());
+
         // create user
         log.info("Creating new user...");
-        User user = userFactory.createUser(dto, roles);
+        User user = userFactory.createUser(dto, doctor, roles);
         user = userDomainService.save(user);
         log.info("{} created.", user);
         return user;

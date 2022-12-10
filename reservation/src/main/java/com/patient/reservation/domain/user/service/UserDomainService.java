@@ -96,7 +96,10 @@ public class UserDomainService {
 
         specifications.add((user, q, cb) -> cb.equal(user.get(IS_PATIENT), Boolean.TRUE));
 
-        specifications.add((user, q, cb) -> cb.equal(user.get(DOCTOR_ID), ((UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()));
+        UserDetailsImpl userDetails = ((UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        if(Boolean.TRUE.equals(userDetails.isDoctor())) {
+            specifications.add((user, q, cb) -> cb.equal(user.get(DOCTOR_ID), userDetails.getId()));
+        }
 
         return specifications;
     }
