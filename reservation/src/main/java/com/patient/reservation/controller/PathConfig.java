@@ -6,7 +6,7 @@ public interface PathConfig {
     String UID_TEMPLATE = "/{uid}";
 
     String USERS = BASE_PATH_API + "/users";
-    String VISITS = BASE_PATH_API + "/vists";
+    String VISITS = BASE_PATH_API + "/visits";
     String AUTH = BASE_PATH_API + "/auth";
     String PATIENTS = BASE_PATH_API + "/patients";
 

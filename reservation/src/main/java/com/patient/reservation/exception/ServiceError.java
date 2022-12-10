@@ -21,7 +21,9 @@ public enum ServiceError {
     E0005(ErrorCode.E0005, "Invalid role for patient"),
     E0006(ErrorCode.E0006, "The patient flag must be true"),
     E0007(ErrorCode.E0007, "The doctor flag must be false"),
-    E0008(ErrorCode.E0008, "The user is not a patient");
+    E0008(ErrorCode.E0008, "The user is not a patient"),
+    E0009(ErrorCode.E0009, "You are trying to associate the patient with another doctor."),
+    E0010(ErrorCode.E0010, "You are trying to modify a patient not associated with you");
 
     @Getter
     private String code;
@@ -51,5 +53,11 @@ public enum ServiceError {
         public static final String E0007 = "E0007";
         public static final String E0008 = "E0008";
         public static final String E0009 = "E0009";
+        public static final String E0010 = "E0010";
+        public static final String E0011 = "E0011";
+        public static final String E0012 = "E0012";
+        public static final String E0013 = "E0013";
+        public static final String E0014 = "E0014";
+        public static final String E0015 = "E0015";
     }
 }

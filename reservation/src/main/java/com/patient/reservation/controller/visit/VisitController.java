@@ -1,12 +1,9 @@
 package com.patient.reservation.controller.visit;
 
 import com.patient.reservation.controller.PathConfig;
-import com.patient.reservation.controller.user.PatientSearchParameters;
-import com.patient.reservation.controller.user.representation.UserRepresentationModel;
 import com.patient.reservation.controller.visit.assembler.VisitRepresentationModelAssembler;
-import com.patient.reservation.domain.user.model.User;
+import com.patient.reservation.controller.visit.representation.VisitRepresentationModel;
 import com.patient.reservation.domain.visit.model.Visit;
-import com.patient.reservation.domain.visit.service.VisitDomainService;
 import com.patient.reservation.service.visit.VisitService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -48,17 +45,15 @@ public class VisitController {
     @Autowired
     private PagedResourcesAssembler<Visit> visitPagedResourcesAssembler;
 
-    @Operation(summary = "Get a paginated list of patients")
+    @Operation(summary = "Get a paginated list of visits")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "The list of users",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UserRepresentationModel.class))})})
+            @ApiResponse(responseCode = "200", description = "The list of visits",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VisitRepresentationModel.class))})})
     @GetMapping
-    public ResponseEntity<PagedModel<UserRepresentationModel>> getPatients(HttpServletRequest request, HttpServletResponse response,
+    public ResponseEntity<PagedModel<VisitRepresentationModel>> getPatients(HttpServletRequest request, HttpServletResponse response,
                                                                            @Valid VisitSearchParameters searchParameters, Pageable pageable) {
-        // Page<Visit> users = visitService.getVisits(searchParameters, pageable);
-        //return ok().body(visitPagedResourcesAssembler.toModel(visits, visitRepresentationModelAssembler));
-        // TODO
-        return null;
+        Page<Visit> visits = visitService.getVisits(searchParameters, pageable);
+        return ok().body(visitPagedResourcesAssembler.toModel(visits, visitRepresentationModelAssembler));
     }
 
 }

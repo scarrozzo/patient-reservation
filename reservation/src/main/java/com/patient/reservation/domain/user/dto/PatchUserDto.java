@@ -39,4 +39,5 @@ public class PatchUserDto {
 
     @Schema(description = "Can login", example = "true")
     private Optional<Boolean> loginEnabled;
+
 }

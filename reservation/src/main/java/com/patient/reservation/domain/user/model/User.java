@@ -2,6 +2,7 @@ package com.patient.reservation.domain.user.model;
 
 import com.patient.core.model.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -56,6 +57,14 @@ public class User extends BaseEntity {
 
     @Column
     private Boolean isPatient;
+
+    @Column
+    private Long doctorId;
+
+    @Setter(AccessLevel.NONE)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctorId", referencedColumnName = "id", insertable = false, updatable = false)
+    private User doctor;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

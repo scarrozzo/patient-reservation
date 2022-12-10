@@ -4,12 +4,14 @@ package com.patient.reservation.domain.user.service;
 import com.patient.reservation.controller.user.PatientSearchParameters;
 import com.patient.reservation.domain.user.model.User;
 import com.patient.reservation.domain.user.repository.UserRepository;
+import com.patient.reservation.security.UserDetailsImpl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -27,6 +29,7 @@ public class UserDomainService {
     public static final String LAST_NAME = "lastName";
     public static final String DATE_OF_BIRTH = "dateOfBirth";
     public static final String IS_PATIENT = "isPatient";
+    public static final String DOCTOR_ID = "doctorId";
     public static final String LIKE_OPERATOR = "%";
 
     @Autowired
@@ -53,7 +56,7 @@ public class UserDomainService {
     }
 
     public Page<User> getPatients(PatientSearchParameters searchParameters, Pageable pageable){
-        List<Specification<User>> userSpecifications = buildUserSpecification(searchParameters);
+        List<Specification<User>> userSpecifications = buildUserSpecifications(searchParameters);
 
         Iterator<Specification<User>> it = userSpecifications.iterator();
         Specification<User> combinedSpecifications = Specification.where(it.next());
@@ -65,10 +68,10 @@ public class UserDomainService {
     }
 
     public User getPatient(String uid){
-        return userRepository.findByUidAndIsPatient(uid, Boolean.TRUE).orElseThrow(EntityNotFoundException::new);
+        return userRepository.findByUidAndIsPatientAndDoctorId(uid, Boolean.TRUE, ((UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()).orElseThrow(EntityNotFoundException::new);
     }
 
-    private List<Specification<User>> buildUserSpecification(PatientSearchParameters searchParameters){
+    private List<Specification<User>> buildUserSpecifications(PatientSearchParameters searchParameters){
         List<Specification<User>> specifications = new ArrayList<>();
 
         if(StringUtils.hasText(searchParameters.getPatientIdentifier())){
@@ -92,6 +95,8 @@ public class UserDomainService {
         }
 
         specifications.add((user, q, cb) -> cb.equal(user.get(IS_PATIENT), Boolean.TRUE));
+
+        specifications.add((user, q, cb) -> cb.equal(user.get(DOCTOR_ID), ((UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId()));
 
         return specifications;
     }
