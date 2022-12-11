@@ -15,9 +15,9 @@ The application workflow has to:
 ## Project Description
 The project consists of the following sub-projects:
 
-**core-lib**: Maven library containing abstract base classes and utility classes that can be reused in other projects. 
-**reservation**: spring boot application (version 3.0.0) that handles data persistence and implementation of the REST API used by the frontend.
-**frontend**: single page application implemented with Angular (version 14.2.0). 
+**core-lib**: Maven library containing abstract base classes and utility classes that can be reused in other projects.<br /> 
+**reservation**: spring boot application (version 3.0.0) that handles data persistence and implementation of the REST API used by the frontend.<br /> 
+**frontend**: single page application implemented with Angular (version 14.2.0). <br /> 
 
 ### Reservation Project
 Features implemented in this project:
@@ -39,8 +39,8 @@ associated with different user types (admin, doctors, patients). The roles are c
 - Error handling: all exceptions are handled by the Spring controller advice component, which is responsible for returning code and a message to the client. The code can be used by clients to map messages exploit i18n
 - Unit tests
 
-### frontend project
-The UI unlike the backend does not cover all the functional requirements at the moment.
+### Frontend Project
+The UI unlike the backend does not cover all the functional requirements at the moment.<br />
 Features implemented in this project:
 - Login page/component: invokes the login endpoint and if successful redirects to the visit calendar page
 - Visit calendar/component: invokes the visit search API and populates the calendar with visits associated with the logged-in user (doctor)
