@@ -6,7 +6,7 @@ import {Router} from '@angular/router';
 @Component({
   selector: 'signin',
   templateUrl: './signin.html',
-  styleUrls: ['./signin.css']
+  styleUrls: ['./signin.scss']
 })
 export class SigninComponent implements OnInit {
   signinForm: FormGroup;
