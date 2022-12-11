@@ -1,0 +1,75 @@
+package com.patient.reservation.command.visit;
+
+import com.patient.reservation.BaseTest;
+import com.patient.reservation.command.visit.util.VisitValidator;
+import com.patient.reservation.domain.visit.dto.PostVisitDto;
+import com.patient.reservation.domain.visit.model.Visit;
+import com.patient.reservation.domain.visit.model.VisitReason;
+import com.patient.reservation.domain.visit.model.VisitType;
+import com.patient.reservation.domain.visit.service.VisitDomainService;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.UUID;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+class CreateVisitCommandTest extends BaseTest {
+
+    @Mock
+    private VisitDomainService visitDomainService;
+
+    @InjectMocks
+    private CreateVisitCommand command;
+
+    private PostVisitDto generateValidVisit(){
+        return PostVisitDto.builder()
+                .date(ZonedDateTime.now().plusHours(2).plusMinutes(30))
+                .visitType(VisitType.DOCTOR_OFFICE)
+                .visitReason(VisitReason.RECURRING_VISIT)
+                .patientUid(UUID.randomUUID().toString())
+                .build();
+    }
+
+    @DisplayName("Test that it is impossible to create a visit in the past")
+    @Test
+    void testCreateVisitInThePast() {
+        PostVisitDto dto = generateValidVisit();
+        dto.setDate(ZonedDateTime.now().minusSeconds(1));
+
+        ReflectionTestUtils.setField(command, "dto", dto);
+        ReflectionTestUtils.setField(command, "visitValidator", new VisitValidator());
+        Assertions.assertThrows(IllegalArgumentException.class, command::doExecute);
+    }
+
+    @DisplayName("Tests that it is impossible to create one visit overlapping the others")
+    @Test
+    void testCreateOverlappedVisit() {
+        PostVisitDto dto = generateValidVisit();
+        dto.setDate(ZonedDateTime.now().plusMinutes(1));
+
+        Visit existingVisit = new Visit();
+        when(visitDomainService.getVisits(any(), any())).thenReturn(new PageImpl<>(List.of(existingVisit)));
+        VisitValidator visitValidator = new VisitValidator();
+        ReflectionTestUtils.setField(visitValidator, "visitDomainService", visitDomainService);
+
+        ReflectionTestUtils.setField(command, "visitValidator", visitValidator);
+        ReflectionTestUtils.setField(command, "dto", dto);
+        Assertions.assertThrows(IllegalArgumentException.class, command::doExecute);
+    }
+
+}

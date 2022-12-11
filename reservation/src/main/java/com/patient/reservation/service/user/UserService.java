@@ -1,23 +1,19 @@
 package com.patient.reservation.service.user;
 
+import com.patient.reservation.command.user.CreatePatientCommand;
 import com.patient.reservation.command.user.CreateUserCommand;
 import com.patient.reservation.command.user.DeleteUserCommand;
-import com.patient.reservation.command.user.UpdateUserCommand;
+import com.patient.reservation.command.user.UpdatePatientCommand;
 import com.patient.reservation.controller.user.PatientSearchParameters;
 import com.patient.reservation.domain.user.dto.PatchUserDto;
 import com.patient.reservation.domain.user.dto.PostUserDto;
-import com.patient.reservation.domain.user.model.RoleType;
 import com.patient.reservation.domain.user.model.User;
 import com.patient.reservation.domain.user.service.UserDomainService;
-import com.patient.reservation.exception.PermissionDeniedException;
-import com.patient.reservation.exception.ServiceError;
-import com.patient.reservation.security.UserDetailsImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -33,6 +29,9 @@ public class UserService {
     @Autowired
     private BeanFactory beanFactory;
 
+    /**
+    * All users
+    * */
     public Page<User> getUsers(Pageable pageable) {
         return userDomainService.getUsers(pageable);
     }
@@ -64,39 +63,13 @@ public class UserService {
     }
 
     public User createPatient(PostUserDto postUserDto) {
-        if (postUserDto.getRoles() != null && postUserDto.getRoles().stream().anyMatch(p -> !p.equals(RoleType.READER))) {
-            throw new IllegalArgumentException(ServiceError.E0005.getMessage());
-        }
-
-        if (Boolean.FALSE.equals(postUserDto.getIsPatient())) {
-            throw new PermissionDeniedException(ServiceError.E0006.getMessage());
-        }
-
-        if (Boolean.TRUE.equals(postUserDto.getIsDoctor())) {
-            throw new PermissionDeniedException(ServiceError.E0007.getMessage());
-        }
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (Boolean.TRUE.equals(userDetails.isDoctor()) && !userDetails.getUid().equals(postUserDto.getDoctorUid())) {
-            throw new PermissionDeniedException(ServiceError.E0009.getMessage());
-        }
-
-        return createUser(postUserDto);
+        CreatePatientCommand command = beanFactory.getBean(CreatePatientCommand.class, postUserDto);
+        return command.execute();
     }
 
     public User updatePatient(String uid, PatchUserDto patchUserDto) {
         User user = userDomainService.getUser(uid);
-
-        if (!Boolean.TRUE.equals(user.getIsPatient())) {
-            throw new PermissionDeniedException(ServiceError.E0008.getMessage());
-        }
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (Boolean.TRUE.equals(userDetails.isDoctor()) && !userDetails.getId().equals(user.getDoctorId())) {
-            throw new PermissionDeniedException(ServiceError.E0010.getMessage());
-        }
-
-        UpdateUserCommand command = beanFactory.getBean(UpdateUserCommand.class, user, patchUserDto);
+        UpdatePatientCommand command = beanFactory.getBean(UpdatePatientCommand.class, user, patchUserDto);
         return command.execute();
     }
 }
