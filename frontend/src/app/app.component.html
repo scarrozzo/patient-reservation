@@ -1,0 +1,10 @@
+<div class="ps-3 pe-3">
+  <nav class="navbar navbar-light bg-light ps-3 pe-3">
+    <a class="navbar-brand">Patient Reservation</a>
+    <form class="form-inline">
+      <a *ngIf="!this.authService.isLoggedIn" class="p-2 text-dark" routerLinkActive="active" routerLink="/log-in">Sign in</a>
+      <button (click)="logout()" *ngIf="this.authService.isLoggedIn" type="button" class="btn btn-danger">Logout</button>
+    </form>
+  </nav>
+  <router-outlet></router-outlet>
+</div>
